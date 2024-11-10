@@ -1,0 +1,5 @@
+/* Your existing CSS */
+.button {
+    text-decoration: none;  /* Since we're using <a> tags now instead of buttons */
+    /* ... rest of your button styles ... */
+} 

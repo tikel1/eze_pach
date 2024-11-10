@@ -1,0 +1,217 @@
+/* Add at the top of the file */
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.camera-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    position: relative;
+    background: #000;
+    border-radius: 30px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Camera frame */
+.camera-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: #000;
+    overflow: hidden;
+}
+
+#video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+#video.active {
+    display: block;
+}
+
+/* Focus frame */
+.focus-frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+}
+
+.focus-frame::before {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FFD700;
+    font-size: 24px;
+}
+
+#startCamera {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px;
+    font-size: 18px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    z-index: 2;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+/* Bottom controls bar */
+.bottom-controls {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    background: #000;
+}
+
+.shutter-button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid #666;
+    cursor: pointer;
+}
+
+.shutter-button:disabled {
+    background: #333;
+    border-color: #444;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.action-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+#retake {
+    background: #666;
+}
+
+#analyze {
+    background: #4CAF50;
+}
+
+#canvas {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#result {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+#result-content {
+    padding: 40px 20px 20px 20px;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    font-family: 'Inter', sans-serif;
+}
+
+#result-content h1,
+#result-content h2,
+#result-content h3 {
+    margin-top: 0.5em;
+    font-weight: 600;
+}
+
+#result-content p {
+    margin-bottom: 1em;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 11;
+}
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 2px solid #4CAF50;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#result::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+/* Make sure video and photo are also properly contained */
+#video.active,
+#photo.active {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+} 
