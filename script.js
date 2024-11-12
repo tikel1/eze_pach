@@ -24,27 +24,36 @@ async function startCamera() {
             throw new Error('Camera API is not supported in this browser');
         }
 
+        // First, enumerate all cameras
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+        console.log('Available cameras:', videoDevices);
+
+        // Try to find back camera
+        const backCamera = videoDevices.find(device => 
+            device.label.toLowerCase().includes('back') || 
+            device.label.toLowerCase().includes('rear') ||
+            device.label.toLowerCase().includes('environment')
+        );
+
         const constraints = {
-            video: {
-                facingMode: { exact: "environment" },  // Force back camera
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            },
+            video: backCamera 
+                ? { 
+                    deviceId: { exact: backCamera.deviceId },
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                  }
+                : {
+                    facingMode: { exact: "environment" },
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                  },
             audio: false
         };
 
-        // If back camera fails, fall back to any available camera
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            video.srcObject = stream;
-        } catch (err) {
-            console.log('Back camera not available, trying front camera');
-            const fallbackStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false
-            });
-            video.srcObject = fallbackStream;
-        }
+        console.log('Using constraints:', constraints);
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
         
         video.onloadedmetadata = () => {
             console.log('Video metadata loaded');
@@ -53,21 +62,35 @@ async function startCamera() {
 
     } catch (error) {
         console.error('Camera initialization error:', error);
-        const errorMessage = document.createElement('div');
-        errorMessage.style.color = 'white';
-        errorMessage.style.padding = '20px';
-        errorMessage.style.textAlign = 'center';
-        errorMessage.innerHTML = `
-            Camera access failed:<br>
-            ${error.message}<br><br>
-            Please ensure you're:
-            <ul style="text-align: left;">
-                <li>Using HTTPS</li>
-                <li>Allowing camera permissions</li>
-                <li>Using a supported browser (Chrome, Firefox, Edge)</li>
-            </ul>
-        `;
-        video.parentElement.appendChild(errorMessage);
+        // Try fallback to any available camera
+        try {
+            console.log('Trying fallback camera...');
+            const fallbackStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            });
+            video.srcObject = fallbackStream;
+            video.onloadedmetadata = () => {
+                console.log('Fallback camera loaded');
+                captureButton.disabled = false;
+            };
+        } catch (fallbackError) {
+            const errorMessage = document.createElement('div');
+            errorMessage.style.color = 'white';
+            errorMessage.style.padding = '20px';
+            errorMessage.style.textAlign = 'center';
+            errorMessage.innerHTML = `
+                Camera access failed:<br>
+                ${error.message}<br><br>
+                Please ensure you're:
+                <ul style="text-align: left;">
+                    <li>Using HTTPS</li>
+                    <li>Allowing camera permissions</li>
+                    <li>Using a supported browser (Chrome, Firefox, Edge)</li>
+                </ul>
+            `;
+            video.parentElement.appendChild(errorMessage);
+        }
     }
 }
 
