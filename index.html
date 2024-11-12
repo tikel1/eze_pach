@@ -13,8 +13,15 @@
             <video id="video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
             <canvas id="canvas" style="display: none;"></canvas>
             <img id="capturedImage" style="display: none;">
-            <div class="result-container">
-                <div id="analysis"></div>
+            <div class="button-container">
+                <button id="switchCameraButton" class="camera-switch">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 11.5V13H9v2.5L5.5 12 9 8.5V11h6V8.5l3.5 3.5-3.5 3.5z" fill="currentColor"/>
+                    </svg>
+                </button>
+                <button id="retakeButton" style="display: none;">Retake</button>
+                <button id="captureButton" disabled></button>
+                <button id="analyzeButton" style="display: none;">Analyze</button>
             </div>
         </div>
         <div class="controls-container">

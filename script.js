@@ -12,87 +12,58 @@ let capturedImage;
 let captureButton;
 let retakeButton;
 let analyzeButton;
+let currentStream;
 
-async function startCamera() {
-    const video = document.getElementById('video');
-    const captureButton = document.getElementById('captureButton');
-    
+async function startCamera(preferredFacing = 'environment') {
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+    }
+
     try {
-        console.log('Requesting camera access...');
-        
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            throw new Error('Camera API is not supported in this browser');
-        }
-
-        // First, enumerate all cameras
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter(device => device.kind === 'videoinput');
         console.log('Available cameras:', videoDevices);
 
-        // Try to find back camera
-        const backCamera = videoDevices.find(device => 
-            device.label.toLowerCase().includes('back') || 
-            device.label.toLowerCase().includes('rear') ||
-            device.label.toLowerCase().includes('environment')
-        );
-
         const constraints = {
-            video: backCamera 
-                ? { 
-                    deviceId: { exact: backCamera.deviceId },
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                  }
-                : {
-                    facingMode: { exact: "environment" },
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                  },
+            video: {
+                facingMode: { ideal: preferredFacing },
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
             audio: false
         };
 
-        console.log('Using constraints:', constraints);
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        video.srcObject = stream;
+        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+        const video = document.getElementById('video');
+        video.srcObject = currentStream;
         
-        video.onloadedmetadata = () => {
-            console.log('Video metadata loaded');
-            captureButton.disabled = false;
-        };
-
+        document.getElementById('captureButton').disabled = false;
+        
     } catch (error) {
-        console.error('Camera initialization error:', error);
-        // Try fallback to any available camera
-        try {
-            console.log('Trying fallback camera...');
-            const fallbackStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false
-            });
-            video.srcObject = fallbackStream;
-            video.onloadedmetadata = () => {
-                console.log('Fallback camera loaded');
-                captureButton.disabled = false;
-            };
-        } catch (fallbackError) {
-            const errorMessage = document.createElement('div');
-            errorMessage.style.color = 'white';
-            errorMessage.style.padding = '20px';
-            errorMessage.style.textAlign = 'center';
-            errorMessage.innerHTML = `
-                Camera access failed:<br>
-                ${error.message}<br><br>
-                Please ensure you're:
-                <ul style="text-align: left;">
-                    <li>Using HTTPS</li>
-                    <li>Allowing camera permissions</li>
-                    <li>Using a supported browser (Chrome, Firefox, Edge)</li>
-                </ul>
-            `;
-            video.parentElement.appendChild(errorMessage);
-        }
+        console.error('Camera error:', error);
     }
 }
+
+// Add switch camera functionality
+async function switchCamera() {
+    const video = document.getElementById('video');
+    const currentFacingMode = currentStream?.getVideoTracks()[0]?.getSettings()?.facingMode;
+    
+    // Toggle between front and back cameras
+    const newFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+    await startCamera(newFacingMode);
+}
+
+// Add event listener for switch camera button
+document.addEventListener('DOMContentLoaded', () => {
+    const switchButton = document.getElementById('switchCameraButton');
+    if (switchButton) {
+        switchButton.addEventListener('click', switchCamera);
+    }
+    
+    // Start with back camera
+    startCamera('environment');
+});
 
 function initializeElements() {
     // Get all DOM elements
