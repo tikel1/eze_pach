@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 import { WASTE_ANALYSIS_PROMPT } from './prompts.js';
 
-const GEMINI_API_KEY = 'AIzaSyBiRjWLSn3vJvHCyTJ4izwl9MAxbENco8A';
+const GEMINI_API_KEY = 'MY KEY';
 
 let stream;
 let video;
