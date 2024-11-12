@@ -1,26 +1,22 @@
-# Trash Scanner
+# Smart Waste Sorter
 
-A mobile-friendly web app that helps identify how to properly dispose of items using AI vision.
+A web application that helps users determine the correct bin for waste disposal using AI vision analysis.
+
+## Features
+- Real-time camera access
+- Image capture
+- AI-powered waste analysis
+- Responsive design
+- Mobile-friendly interface
 
 ## Setup
-
 1. Clone the repository
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Create a `.env` file with your Google API key:
-   ```
-   GOOGLE_API_KEY=your_api_key_here
-   ```
-4. Run the server:
-   ```bash
-   python server.py
-   ```
+2. Add your Gemini API key to `script.js`
+3. Serve the files using a local server (e.g., `python -m http.server 8000`)
+4. Open `http://localhost:8000` in your browser
 
-## Usage
-
-1. Open the app in your mobile browser
-2. Allow camera access
-3. Take a photo of the item
-4. Click "Analyze" to get disposal instructions 
+## Technologies
+- HTML5
+- CSS3
+- JavaScript
+- Google Gemini AI API 
