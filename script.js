@@ -15,31 +15,24 @@ let analyzeButton;
 
 async function startCamera() {
     try {
-        // Initialize DOM elements
-        initializeElements();
-        
-        // Request camera access
-        stream = await navigator.mediaDevices.getUserMedia({
+        const stream = await navigator.mediaDevices.getUserMedia({
             video: {
-                facingMode: 'environment'
-            }
+                facingMode: 'user',  // Use front camera by default
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false
         });
-
-        // Set up video element
+        
+        const video = document.getElementById('video');
         video.srcObject = stream;
-        video.style.display = 'block';
-        capturedImage.style.display = 'none';
         
-        // Show take photo button, hide others
-        captureButton.style.display = 'block';
-        captureButton.disabled = false;
-        retakeButton.style.display = 'none';
-        analyzeButton.style.display = 'none';
+        // Enable the capture button once camera is ready
+        document.getElementById('captureButton').disabled = false;
         
-        console.log('Camera started successfully');
-    } catch (err) {
-        console.error('Camera error:', err);
-        alert(`Camera error: ${err.message}`);
+    } catch (error) {
+        console.error('Camera error:', error);
+        alert('Please allow camera access to use this application');
     }
 }
 
