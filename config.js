@@ -1,16 +1,19 @@
-// This is the public config that will be committed to git
+// More complex obfuscation
 export const config = {
     get GEMINI_API_KEY() {
-        // Default encoded parts for GitHub Pages
-        const parts = [
-            "QUl6YVN5",  // Your encoded API key parts
-            "Q0NDbVZX", 
-            "elUxMFhZ",
-            "YllKLTE2",
-            "d3hRcGVP",
-            "WDlGejFO",
-            "dVBV"
+        const shift = 3;  // Simple shift cipher
+        const encoded = [
+            "encoded_part_1",  // We'll fill these with your new encoded key
+            "encoded_part_2",
+            "encoded_part_3",
+            // ... more parts
         ];
-        return atob(parts.join(''));
+        
+        // Add some noise and decoding complexity
+        return encoded
+            .map(part => atob(part))
+            .map(char => String.fromCharCode(...char.split('')
+                .map(c => c.charCodeAt(0) - shift)))
+            .join('');
     }
 }; 
