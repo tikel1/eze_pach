@@ -14,25 +14,62 @@ let retakeButton;
 let analyzeButton;
 
 async function startCamera() {
+    const video = document.getElementById('video');
+    const captureButton = document.getElementById('captureButton');
+    
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({
+        // Log that we're trying to start the camera
+        console.log('Requesting camera access...');
+        
+        // Check if getUserMedia is supported
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error('Camera API is not supported in this browser');
+        }
+
+        const constraints = {
             video: {
-                facingMode: 'user',  // Use front camera by default
+                facingMode: 'user',
                 width: { ideal: 1280 },
                 height: { ideal: 720 }
             },
             audio: false
-        });
+        };
+
+        console.log('Requesting stream with constraints:', constraints);
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         
-        const video = document.getElementById('video');
+        console.log('Camera stream obtained successfully');
         video.srcObject = stream;
         
-        // Enable the capture button once camera is ready
-        document.getElementById('captureButton').disabled = false;
-        
+        // Enable button when video is ready to play
+        video.onloadedmetadata = () => {
+            console.log('Video metadata loaded');
+            captureButton.disabled = false;
+        };
+
+        // Add error handler for video
+        video.onerror = (err) => {
+            console.error('Video error:', err);
+        };
+
     } catch (error) {
-        console.error('Camera error:', error);
-        alert('Please allow camera access to use this application');
+        console.error('Camera initialization error:', error);
+        // Show a more visible error to the user
+        const errorMessage = document.createElement('div');
+        errorMessage.style.color = 'white';
+        errorMessage.style.padding = '20px';
+        errorMessage.style.textAlign = 'center';
+        errorMessage.innerHTML = `
+            Camera access failed:<br>
+            ${error.message}<br><br>
+            Please ensure you're:
+            <ul style="text-align: left;">
+                <li>Using HTTPS</li>
+                <li>Allowing camera permissions</li>
+                <li>Using a supported browser (Chrome, Firefox, Edge)</li>
+            </ul>
+        `;
+        video.parentElement.appendChild(errorMessage);
     }
 }
 
