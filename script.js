@@ -18,43 +18,41 @@ async function startCamera() {
     const captureButton = document.getElementById('captureButton');
     
     try {
-        // Log that we're trying to start the camera
         console.log('Requesting camera access...');
         
-        // Check if getUserMedia is supported
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             throw new Error('Camera API is not supported in this browser');
         }
 
         const constraints = {
             video: {
-                facingMode: 'user',
+                facingMode: { exact: "environment" },  // Force back camera
                 width: { ideal: 1280 },
                 height: { ideal: 720 }
             },
             audio: false
         };
 
-        console.log('Requesting stream with constraints:', constraints);
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        // If back camera fails, fall back to any available camera
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            video.srcObject = stream;
+        } catch (err) {
+            console.log('Back camera not available, trying front camera');
+            const fallbackStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            });
+            video.srcObject = fallbackStream;
+        }
         
-        console.log('Camera stream obtained successfully');
-        video.srcObject = stream;
-        
-        // Enable button when video is ready to play
         video.onloadedmetadata = () => {
             console.log('Video metadata loaded');
             captureButton.disabled = false;
         };
 
-        // Add error handler for video
-        video.onerror = (err) => {
-            console.error('Video error:', err);
-        };
-
     } catch (error) {
         console.error('Camera initialization error:', error);
-        // Show a more visible error to the user
         const errorMessage = document.createElement('div');
         errorMessage.style.color = 'white';
         errorMessage.style.padding = '20px';
