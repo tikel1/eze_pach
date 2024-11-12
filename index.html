@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Waste Sorter</title>
+    <title>eze pach</title>
     <link rel="stylesheet" href="styles.css">
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
@@ -12,11 +12,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Smart Waste Sorter</h1>
+        <h1>eze pach</h1>
         <div class="camera-container">
             <video id="video" autoplay playsinline></video>
             <canvas id="canvas" style="display: none;"></canvas>
             <img id="capturedImage" style="display: none;">
+            <div class="result-container">
+                <div id="analysis"></div>
+            </div>
         </div>
         <div class="controls-container">
             <div class="button-container">
@@ -24,9 +27,6 @@
                 <button id="captureButton" disabled></button>
                 <button id="analyzeButton" style="display: none;">Analyze</button>
             </div>
-        </div>
-        <div class="result-container">
-            <div id="analysis"></div>
         </div>
     </div>
     <script src="script.js" type="module"></script>

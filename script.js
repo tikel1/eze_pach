@@ -1,7 +1,9 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 import { WASTE_ANALYSIS_PROMPT } from './prompts.js';
+import { config } from './config.js';
 
-const GEMINI_API_KEY = 'MY KEY';
+// Use the API key
+const GEMINI_API_KEY = config.GEMINI_API_KEY;
 
 let stream;
 let video;
@@ -10,28 +12,6 @@ let capturedImage;
 let captureButton;
 let retakeButton;
 let analyzeButton;
-
-// Initialize Gemini
-async function initGemini() {
-    try {
-        const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash",
-            generationConfig: {
-                temperature: 0.4,
-                topK: 32,
-                topP: 1,
-                maxOutputTokens: 4096,
-            }
-        });
-        
-        console.log('Gemini initialized successfully');
-        return model;
-    } catch (error) {
-        console.error('Failed to initialize Gemini:', error);
-        throw error;
-    }
-}
 
 async function startCamera() {
     try {
@@ -112,11 +92,23 @@ function captureImage() {
 
 async function analyzeImage() {
     const analysisDiv = document.getElementById('analysis');
+    const resultContainer = document.querySelector('.result-container');
+    
+    resultContainer.classList.add('visible');
     analysisDiv.innerHTML = 'Analyzing...';
     
     try {
-        const model = await initGemini();
-        
+        const genAI = new GoogleGenerativeAI(config.GEMINI_API_KEY);
+        // Update to use gemini-1.5-flash
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-1.5-flash",  // Changed to Gemini 1.5 Flash
+            generationConfig: {
+                temperature: 0.4,
+                topK: 32,
+                topP: 1,
+            }
+        });
+
         // Get the image data from canvas
         const imageDataUrl = canvas.toDataURL('image/jpeg');
         const base64Image = imageDataUrl.split(',')[1];
@@ -133,19 +125,36 @@ async function analyzeImage() {
         const response = await result.response;
         const text = response.text();
         
-        analysisDiv.innerHTML = text;
-        console.log('Analysis complete:', text);
+        // Format the response as HTML
+        const formattedResponse = `
+            <h1>Analysis Results</h1>
+            <div class="analysis-content">
+                ${text}
+            </div>
+            <hr>
+            <em>Analyzed at ${new Date().toLocaleTimeString()}</em>
+        `;
+
+        analysisDiv.innerHTML = formattedResponse;
         
     } catch (error) {
         console.error('Analysis error:', error);
-        analysisDiv.innerHTML = `Analysis failed: ${error.message}`;
+        analysisDiv.innerHTML = `
+            <h1>Error</h1>
+            <strong>Analysis failed:</strong> ${error.message}
+        `;
     }
 }
 
 function retakePhoto() {
-    // Hide analysis result
+    // Hide the result container
+    const resultContainer = document.querySelector('.result-container');
+    resultContainer.classList.remove('visible');
+    
+    // Clear the analysis
     document.getElementById('analysis').innerHTML = '';
-    // Start the camera stream again
+    
+    // Start the camera again
     startCamera();
 }
 

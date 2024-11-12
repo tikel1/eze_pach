@@ -1,11 +1,3 @@
-# Dependencies
-node_modules/
+# Add this to .gitignore
 .env
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db 
+config.js 
