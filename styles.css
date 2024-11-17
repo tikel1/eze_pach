@@ -281,8 +281,8 @@ h1 {
 }
 
 .bin-icon {
-    width: 32px;
-    height: 32px;
+    width: 25%;
+    height: auto;
     margin: 10px 0;
     display: block;
     margin-left: auto;
