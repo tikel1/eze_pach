@@ -243,3 +243,48 @@ h1 {
     width: 24px;
     height: 24px;
 }
+
+/* Add to your existing styles */
+.analysis-content {
+    text-align: center;
+    padding: 10px;
+    line-height: 1.2;
+}
+
+.analysis-content h1,
+.analysis-content h2,
+.analysis-content h3,
+.analysis-content p,
+.analysis-content strong {
+    margin: 3px 0;
+}
+
+.analysis-content h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.analysis-content h2 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.analysis-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.analysis-content p,
+.analysis-content strong {
+    font-size: 16px;
+}
+
+.bin-icon {
+    width: 32px;
+    height: 32px;
+    margin: 10px 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
