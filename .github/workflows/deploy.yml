@@ -11,7 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Create config from template
+      - name: Debug - List files
+        run: |
+          echo "Current directory contents:"
+          ls -la
+          
+      - name: Create config and directories
         run: |
           mkdir -p public/images
           echo "export const config = {
@@ -24,7 +29,7 @@ jobs:
           cp styles.css public/ || echo "Failed to copy styles.css"
           cp script.js public/ || echo "Failed to copy script.js"
           cp prompts.js public/ || echo "Failed to copy prompts.js"
-          cp images/recycle-bin-*.png public/images/ || echo "Failed to copy images"
+          cp -r images/* public/images/ || echo "Failed to copy images"
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.5

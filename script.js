@@ -113,29 +113,26 @@ function captureImage() {
 }
 
 function displayAnalysis(analysisText) {
-    // Split the text into lines and filter out empty lines
     const lines = analysisText.split('\n').filter(line => line.trim());
     let formattedText = '';
     
-    // Process each numbered line and convert to the desired HTML structure
     lines.forEach((line, index) => {
-        // Remove the number prefix and leading/trailing spaces
         const content = line.replace(/^\d+\s*/, '').trim();
         
         switch(index) {
             case 0: // Line 1 becomes h2
                 formattedText += `<h2>${content}</h2>`;
                 break;
-            case 1: // Line 2 becomes h3
-                formattedText += `<h3>${content}</h3>`;
+            case 1: // Line 2 becomes p (text)
+                formattedText += `<p>${content}</p>`;
                 // Choose the correct bin icon based on the content of line 3 (h1)
                 const binType = lines[2].replace(/^\d+\s*/, '').trim();
                 let binVariant = 'general';
                 if (binType.includes('Orange')) binVariant = 'orange';
                 if (binType.includes('Yellow')) binVariant = 'yellow';
                 
-                // Use relative path with consistent space in filename
-                const imagePath = encodeURI(`recycle-bin - ${binVariant}.png`);
+                // Updated image path to match actual filenames with spaces
+                const imagePath = encodeURI(`images/recycle-bin - ${binVariant}.png`);
                 formattedText += `<img src="${imagePath}" alt="recycle bin" class="bin-icon">`;
                 break;
             case 2: // Line 3 becomes h1
@@ -144,7 +141,7 @@ function displayAnalysis(analysisText) {
             case 3: // Line 4 becomes h3
                 formattedText += `<h3>${content}</h3>`;
                 break;
-            case 4: // Line 5 becomes p
+            case 4: // Line 5 becomes p (text)
                 formattedText += `<p>${content}</p>`;
                 break;
         }
