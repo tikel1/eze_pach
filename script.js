@@ -207,6 +207,18 @@ function retakePhoto() {
     // Clear the analysis
     document.getElementById('analysis').innerHTML = '';
     
+    // Show video, hide captured image
+    document.getElementById('video').style.display = 'block';
+    document.getElementById('capturedImage').style.display = 'none';
+    
+    // Show capture button, hide retake and analyze buttons
+    document.getElementById('captureButton').style.display = 'block';
+    document.getElementById('retakeButton').style.display = 'none';
+    document.getElementById('analyzeButton').style.display = 'none';
+    
+    // Enable the capture button
+    document.getElementById('captureButton').disabled = false;
+    
     // Start the camera again
     startCamera();
 }
