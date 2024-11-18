@@ -153,9 +153,11 @@ function displayAnalysis(analysisText) {
 async function analyzeImage() {
     const analysisDiv = document.getElementById('analysis');
     const resultContainer = document.querySelector('.result-container');
+    const scanningLine = document.querySelector('.scanning-line');
     
     resultContainer.classList.add('visible');
     analysisDiv.innerHTML = 'Analyzing...';
+    scanningLine.style.display = 'block'; // Show scanning line
     
     try {
         const genAI = new GoogleGenerativeAI(config.GEMINI_API_KEY);
@@ -182,6 +184,8 @@ async function analyzeImage() {
         const response = await result.response;
         const text = response.text();
         
+        scanningLine.style.display = 'none'; // Hide scanning line
+        
         analysisDiv.innerHTML = `
             <div class="analysis-content">
                 ${displayAnalysis(text)}
@@ -191,6 +195,7 @@ async function analyzeImage() {
         `;
         
     } catch (error) {
+        scanningLine.style.display = 'none'; // Hide scanning line on error
         console.error('Analysis error:', error);
         analysisDiv.innerHTML = `
             <h1>Error</h1>
@@ -200,6 +205,9 @@ async function analyzeImage() {
 }
 
 function retakePhoto() {
+    // Hide the scanning line
+    document.querySelector('.scanning-line').style.display = 'none';
+    
     // Hide the result container
     const resultContainer = document.querySelector('.result-container');
     resultContainer.classList.remove('visible');

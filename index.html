@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>eze pach</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
         window.GoogleGenerativeAI = GoogleGenerativeAI;
@@ -15,13 +16,11 @@
         <img src="images/eze pach.jpg" alt="eze pach" class="logo">
         <div class="camera-container">
             <video id="video" autoplay playsinline></video>
+            <div class="scanning-line"></div>
             <canvas id="canvas" style="display: none;"></canvas>
             <img id="capturedImage" style="display: none;">
             <button id="switchCameraButton" class="camera-switch">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9h18v10H3z"></path>
-                    <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"></path>
-                </svg>
+                <span class="mdi mdi-camera-flip"></span>
             </button>
             <div class="result-container">
                 <div id="analysis"></div>
