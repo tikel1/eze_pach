@@ -157,7 +157,7 @@ async function analyzeImage() {
     
     resultContainer.classList.add('visible');
     analysisDiv.innerHTML = 'Analyzing...';
-    scanningLine.style.display = 'block'; // Show scanning line
+    scanningLine.style.display = 'block';
     
     try {
         const genAI = new GoogleGenerativeAI(config.GEMINI_API_KEY);
@@ -184,7 +184,16 @@ async function analyzeImage() {
         const response = await result.response;
         const text = response.text();
         
-        scanningLine.style.display = 'none'; // Hide scanning line
+        scanningLine.style.display = 'none';
+        
+        // Check if response contains error messages
+        if (text.toLowerCase().includes('error') || text.toLowerCase().includes('overload')) {
+            analysisDiv.innerHTML = `
+                <h1>Server Error</h1>
+                <p>Please try again later</p>
+            `;
+            return;
+        }
         
         analysisDiv.innerHTML = `
             <div class="analysis-content">
@@ -195,11 +204,11 @@ async function analyzeImage() {
         `;
         
     } catch (error) {
-        scanningLine.style.display = 'none'; // Hide scanning line on error
+        scanningLine.style.display = 'none';
         console.error('Analysis error:', error);
         analysisDiv.innerHTML = `
-            <h1>Error</h1>
-            <strong>Analysis failed:</strong> ${error.message}
+            <h1>Server Error</h1>
+            <p>Please try again later</p>
         `;
     }
 }
