@@ -329,3 +329,12 @@ h1 {
         opacity: 0;
     }
 }
+
+.error-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
