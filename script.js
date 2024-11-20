@@ -189,6 +189,7 @@ async function analyzeImage() {
         // Check if response contains error messages
         if (text.toLowerCase().includes('error') || text.toLowerCase().includes('overload')) {
             analysisDiv.innerHTML = `
+                <img src="images/error.png" alt="error icon" class="error-icon">
                 <h1>Server Error</h1>
                 <p>Please try again later</p>
             `;
@@ -207,6 +208,7 @@ async function analyzeImage() {
         scanningLine.style.display = 'none';
         console.error('Analysis error:', error);
         analysisDiv.innerHTML = `
+            <img src="images/error.png" alt="error icon" class="error-icon">
             <h1>Server Error</h1>
             <p>Please try again later</p>
         `;
