@@ -191,7 +191,7 @@ async function analyzeImage() {
             analysisDiv.innerHTML = `
                 <img src="images/error.png" alt="error icon" class="error-icon">
                 <h1>Server Error</h1>
-                <p>Please try again later</p>
+                <p>${text}</p>
             `;
             return;
         }
@@ -207,10 +207,17 @@ async function analyzeImage() {
     } catch (error) {
         scanningLine.style.display = 'none';
         console.error('Analysis error:', error);
+        
+        // Extract the specific error message
+        let errorMessage = error.toString();
+        if (errorMessage.includes(':generateContent:')) {
+            errorMessage = errorMessage.split(':generateContent:')[1].trim();
+        }
+        
         analysisDiv.innerHTML = `
             <img src="images/error.png" alt="error icon" class="error-icon">
             <h1>Server Error</h1>
-            <p>Please try again later</p>
+            <p>${errorMessage}</p>
         `;
     }
 }
